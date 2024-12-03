@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\KONZA-VDI\Desktop\Just Dont\Todolist\henv
+set VIRTUAL_ENV=C:\Users\Leah\Desktop\Just dont\todolist\henv
 
 if not defined PROMPT set PROMPT=$P$G
 

@@ -1,77 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Todoslist</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <title>To-Do List</title>
     <style>
-        .navbar-dark .navbar-nav .nav-link {
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 1rem 2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffdd57;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(to right, #0056b3, #007bff);
             color: white;
         }
 
-        .navbar-dark .navbar-brand {
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background-color: #ffdd57;
+            color: #0056b3;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #ffc107;
+        }
+
+        .task-preview {
+            padding: 2rem;
+            background-color: white;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .task-preview h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .task-preview ul {
+            list-style: none;
+        }
+
+        .task-preview .task {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #333;
             color: white;
+            margin-top: 2rem;
         }
     </style>
-    
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Todo</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tasks">Tasks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Tasks View</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    {% if success %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Success {{ name }}!</strong> Your task has been submitted successfully. 
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% elif error %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Error!</strong> {{ error }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endif %}
-
-<div class="container my-3">
-    <h2 class="text-center">Add a Task</h2>
-    <form action="/" method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Task Title</label>
-          <input type="text"  class="form-control" id="title" name="title" aria-describedby="emailHelp">
-          
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Task Description</label>
-            <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
-        </div>
+    <header>
+        <nav>
+            <div class="logo">To-Do List</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/add_task">Add Task</a></li>
+                <li><a href="/manage_task">Manage Task</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
         
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+    </header>
 
-</div>
-<footer>
-    <p class="text-center bg-dark text-light fixed-bottom" > Copyright 2024|All rights reserved</p>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>     
+    <main>
+        <section class="hero">
+            <h1>Organize Your Day with Ease</h1>
+            <p>Track tasks, set deadlines, and achieve your goals with our simple and intuitive to-do list app.</p>
+            <a href="/register" class="cta-button">Get Started</a>
+        </section>
+
+        <section class="task-preview">
+            <h2>Your Tasks</h2>
+            <ul>
+                <li>
+                    <div class="task">
+                        <h3>Buy Groceries</h3>
+                        <p>Due: Today</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="task">
+                        <h3>Complete Project Report</h3>
+                        <p>Due: Tomorrow</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="task">
+                        <h3>Call the Plumber</h3>
+                        <p>Due: This Weekend</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 To-Do List. All rights reserved.</p>
+    </footer>
 </body>
+
 </html>
